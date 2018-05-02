@@ -1,0 +1,9 @@
+﻿@*Razor comments do not get spit out into the resulting HTML*@
+@*Polymorphism - List/Array*@
+@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Showing @Model.Count() Products</h2>
+
