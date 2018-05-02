@@ -20,6 +20,7 @@ namespace BoardGameStore.Controllers
                 Name = "Agricola",
                 Description = "Eurostyle farm building game",
                 Price = 49.99m,
+                Image = "/images/Agricola-cards-in-play.jpg",
                 Category = "Worker Placement"
             });
             _products.Add(new Product
@@ -28,12 +29,23 @@ namespace BoardGameStore.Controllers
                 Name = "Mysterium",
                 Description = "Interpretive card image clue giving game",
                 Price = 39.99m,
+                Image = "/images/mysterium.jpg",
                 Category = "Party"
             });
         }
         public IActionResult Index()
         {
             return View(_products);
+        }
+
+        public IActionResult Details(int? id)
+        {
+            if (id.HasValue)
+            {
+                Product p = _products.Single(x => x.ID == id.Value);
+                return View(p);
+            }
+            return NotFound();
         }
     }
 }
