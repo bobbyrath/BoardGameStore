@@ -22,11 +22,6 @@ namespace BoardGameStore.Controllers
             return View();
         }
 
-        public IActionResult SayHello()
-        {
-            return View();
-        }
-
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";

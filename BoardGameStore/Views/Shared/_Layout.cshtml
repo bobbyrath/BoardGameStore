@@ -23,11 +23,24 @@
                     <a class="nav-link" asp-controller="Product" asp-action="Index">Shop</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"  asp-controller="Home" asp-action="Index">Trade</a>
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Trade</a>
                 </li>
+
+                @if (!User.Identity.IsAuthenticated)
+                {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+                        </li>
+                }
+                else 
+                {
                 <li class="nav-item">
-                    <a class="nav-link"  asp-controller="Account" asp-action="Register">Sign Up</a>
+                    <a class="nav-link" asp-controller="Account" asp-action="Logout">Sign Out as @User.Identity.Name </a>
                 </li>
+                }
             </ul>
             <form class="form-inline">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -36,8 +49,6 @@
         </div>
     </nav>
 
-
-  
     <div class="container body-content">
         @RenderBody()
 

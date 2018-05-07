@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(m => m.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+
+}
+
+<form method="post">
+    <div class="form-group">
+        <label for="username">User Name</label>
+        <input name="username" class="form-control" type="text" placeholder="Enter your username..." />
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input name="password" class="form-control" type="password" placeholder="Enter your password..." />
+    </div>
+    <input type="submit" class="btn btn-primary" />
+</form>
+
+
