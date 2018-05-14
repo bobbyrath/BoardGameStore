@@ -12,11 +12,11 @@ namespace BoardGameStore.Controllers
 {
     public class AccountController : Controller
     {
-        SignInManager<IdentityUser> _signInManager { get; set; }
-        UserManager<IdentityUser> _userManager { get; set; }
+        SignInManager<BoardGameHubUser> _signInManager { get; set; }
+        UserManager<BoardGameHubUser> _userManager { get; set; }
 
 
-        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public AccountController(SignInManager<BoardGameHubUser> signInManager, UserManager<BoardGameHubUser> userManager)
         {
             this._signInManager = signInManager;
             this._userManager = userManager;
@@ -45,7 +45,14 @@ namespace BoardGameStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser newUser = new IdentityUser(model.UserName);
+                BoardGameHubUser newUser = new BoardGameHubUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber
+                };
 
                 IdentityResult creationResult = this._signInManager.UserManager.CreateAsync(newUser).Result;
                 if (creationResult.Succeeded)
