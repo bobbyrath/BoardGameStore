@@ -1,7 +1,57 @@
-﻿@model Product
+﻿@model BoardGameStore.Models.Product
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>@Model.Name</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="@Html.DisplayFor(model => model.Image)" alt="First slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="@Html.DisplayFor(model => model.Image)" alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="@Html.DisplayFor(model => model.Image)" alt="Third slide">
+                </div>
+            </div>
+        </div>
+        @* <img src="@Html.DisplayFor(model => model.Image)" class="img-fluid" />*@
+    </div>
+    <dl class="dl-horizontal col-md-6">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category)
+        </dd>
+    </dl>
+</div>

@@ -46,7 +46,7 @@ namespace BoardGameStore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, BoardGameHubDbContext db)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +61,7 @@ namespace BoardGameStore
             //I need this to instruct my app to use Cookies for tracking Signin/SignOut status
             app.UseAuthentication();
             app.UseStaticFiles();
+            db.Initialize();
 
             app.UseMvc(routes =>
             {
@@ -69,5 +70,5 @@ namespace BoardGameStore
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-    }
+   }
 }

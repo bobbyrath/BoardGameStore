@@ -6,6 +6,10 @@
     padding-right: 15px;
 }
 
+.card {
+    margin: 1em;
+}
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
@@ -17,7 +21,14 @@
     width: 100%;
 }
 
-/* QR code generator */
+.container {
+    margin: 0;
+}
+.jumbotron {
+    margin-top: 2em;
+}
+
+/* QR code generator */ 
 #qrCode {
     margin: 15px;
 }

@@ -63,13 +63,22 @@ namespace BoardGameStore.Controllers
             //        }
             //    }
 
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (id.HasValue)
+
+            if (id == null)
             {
-                
+                return NotFound();
             }
-            return NotFound();
+
+            var product = await _context.Products
+                .SingleOrDefaultAsync(m => m.ID == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
         }
     }
 }
