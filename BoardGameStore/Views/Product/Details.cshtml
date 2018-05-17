@@ -1,13 +1,11 @@
-﻿@model BoardGameStore.Models.Product
-
+﻿@model Product
 @{
     ViewData["Title"] = "Details";
 }
-
-
+  
 <hr />
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-sm-12 col-md-4">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -26,32 +24,20 @@
                 </div>
             </div>
         </div>
-        @* <img src="@Html.DisplayFor(model => model.Image)" class="img-fluid" />*@
     </div>
-    <dl class="dl-horizontal col-md-6">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-    </dl>
+    <div class="col-sm-12 col-md-8">
+        <h2>@Model.Name</h2>
+        <p>@Model.Description</p>
+        <h4>@(Model.Price.HasValue ? Model.Price.Value.ToString("C") : "No Price")</h4>
+        <form method="post">
+            <input asp-for="ID" type="hidden" />
+            <select name="quantity">
+                @for (int i = 1; i < 11; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+            <input type="submit" class="btn btn-primary" value="Add to Cart" />
+        </form>
+    </div>
 </div>
