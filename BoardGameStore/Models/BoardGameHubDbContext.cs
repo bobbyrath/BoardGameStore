@@ -23,6 +23,8 @@ namespace BoardGameStore.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems{ get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems{ get; set; }
     }
 
     public class BoardGameHubUser : IdentityUser
@@ -50,5 +52,19 @@ namespace BoardGameStore.Models
         public Cart Cart { get; set; }
         public Product Product { get; set; }
         public int Quantity { get; set; }
+    }
+
+    public class Order
+    {
+        public int ID { get; set; }
+        public CheckoutViewModel CheckOutInfo { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
+    }
+
+    public class OrderItem
+    {
+        public int ID { get; set; }
+        public Order order { get; set; }
+        public CartItem CartItem { get; set; }
     }
 }

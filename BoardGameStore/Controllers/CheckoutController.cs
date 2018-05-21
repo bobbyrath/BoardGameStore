@@ -5,42 +5,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BoardGameStore.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
 namespace BoardGameStore.Controllers
 {
-   
-
-    public class ProductController : Controller
+    public class CheckoutController : Controller
     {
         private readonly BoardGameHubDbContext _context;
 
-        public ProductController(BoardGameHubDbContext context)
+        public CheckoutController(BoardGameHubDbContext context)
         {
             _context = context;
         }
 
-
         public IActionResult Index()
         {
-            List<Product> products = _context.Products.ToList();
-            return View(products);
-        }
-
-        public IActionResult Details(int? id)
-        {
-            if (id.HasValue)
-            {
-                Product p = _context.Products.Find(id.Value);
-                return View(p);
-            }
-            return NotFound();
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Details(int id, int quantity = 1)
+        public IActionResult Checkout(int id)
         {
             Guid cartId;
             Cart cart = null;
@@ -74,11 +57,18 @@ namespace BoardGameStore.Controllers
                 cart.CartItems.Add(item);
             }
 
-            item.Quantity += quantity;
+            
             cart.LastModified = DateTime.Now;
-
+            Order order = new Order();
+            OrderItem orderitem = order.OrderItems.FirstOrDefault(x => x.CartItem.ID == id);
+            if (orderitem == null)
+            {
+                orderitem = new OrderItem();
+                orderitem.CartItem = _context.CartItems.Find(id);
+                order.OrderItems.Add(orderitem);
+            }
             _context.SaveChanges();
-            return RedirectToAction("Index", "Cart");
+            return RedirectToAction("Index", "Order");
         }
     }
 }

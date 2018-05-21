@@ -31,5 +31,11 @@ else
 
         }
     </table>
+    @if (Model.CartItems.Count > 0)
+    {
+        <form method="post" asp-controller="Checkout" asp-action="Index">
+            <input type="submit" value="Checkout" class="btn btn-primary" />
+        </form>
+    }
 
 }

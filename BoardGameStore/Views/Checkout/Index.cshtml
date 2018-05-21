@@ -1,0 +1,23 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Checkout!</h2>
+
+<form method="post" asp-action="Checkout">
+    <div class="form-group">
+        <label for="firstname">First Name</label>
+        <input name="username" class="form-control" type="text" placeholder="Enter your first name..." />
+    </div>
+    <div class="form-group">
+        <label for="lastname">Last Name</label>
+        <input name="password" class="form-control" type="password" placeholder="Enter your last name..." />
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input name="password" class="form-control" type="password" placeholder="Enter your email..." />
+    </div>
+    <input asp-for="ID" type="hidden" />
+    <input type="submit" class="btn btn-primary" value="Place Your Order" />
+</form>
