@@ -19,9 +19,9 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Product" asp-action="Index">Shop</a>
                 </li>
-                <li class="nav-item">
+                @*<li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Trade">Trade</a>
-                </li>
+                </li>*@
 
                 @if (!User.Identity.IsAuthenticated)
                 {
@@ -43,7 +43,7 @@
                 </li>
             </ul>
             <form class="form-inline"  asp-controller="Product" asp-action="Index">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <input class="form-control mr-sm-2" type="search" name="searchString" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
