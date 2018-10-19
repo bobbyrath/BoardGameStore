@@ -15,7 +15,6 @@ namespace BoardGameStore.Controllers
         SignInManager<BoardGameHubUser> _signInManager { get; set; }
         UserManager<BoardGameHubUser> _userManager { get; set; }
 
-
         public AccountController(SignInManager<BoardGameHubUser> signInManager, UserManager<BoardGameHubUser> userManager)
         {
             this._signInManager = signInManager;

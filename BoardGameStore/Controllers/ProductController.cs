@@ -22,12 +22,19 @@ namespace BoardGameStore.Controllers
             _context = context;
         }
 
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            List<Product> products = _context.Products.ToList();
-            return View(products);
+            var games = from m in _context.Products
+                        select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                games = games.Where(s => s.Name.Contains(searchString));
+            }
+
+            return View(await games.ToListAsync());
         }
+
 
         public IActionResult Details(int? id)
         {
