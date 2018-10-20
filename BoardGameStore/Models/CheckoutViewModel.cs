@@ -15,5 +15,6 @@ namespace BoardGameStore.Models
         public string LastName { get; set; }
         [Required]
         public string Email { get; set; }
+        public Cart Cart { get; set; }
     }
 }

@@ -5,70 +5,70 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BoardGameStore.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BoardGameStore.Controllers
 {
     public class CheckoutController : Controller
     {
         private readonly BoardGameHubDbContext _context;
+        private SignInManager<BoardGameHubUser> _signInManager;
 
         public CheckoutController(BoardGameHubDbContext context)
         {
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
-        [HttpPost]
-        public IActionResult Checkout(int id)
+        private async Task GetCurrentCart(CheckoutViewModel model)
         {
             Guid cartId;
             Cart cart = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUser = await _signInManager.UserManager.GetUserAsync(User);
+                model.Email = currentUser.Email;
+                model.FirstName = currentUser.FirstName;
+                model.LastName = currentUser.LastName;
+            }
+
             if (Request.Cookies.ContainsKey("cartId"))
             {
                 if (Guid.TryParse(Request.Cookies["cartId"], out cartId))
                 {
-                    //https://docs.microsoft.com/en-us/ef/core/querying/related-data
-                    cart = _context.Carts
+                    cart = await _context.Carts
                         .Include(carts => carts.CartItems)
                         .ThenInclude(cartitems => cartitems.Product)
-                        .FirstOrDefault(x => x.CookieIdentifier == cartId);
+                        .FirstOrDefaultAsync(x => x.CookieIdentifier == cartId);
                 }
             }
+            model.Cart = cart;
+        }
 
-            if (cart == null)
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Index(CheckoutViewModel model)
+        {
+            await GetCurrentCart(model);
+            if (ModelState.IsValid)
             {
-                cart = new Cart();
-                cartId = Guid.NewGuid();
-                cart.CookieIdentifier = cartId;
-
-                _context.Carts.Add(cart);
-                Response.Cookies.Append("cartId", cartId.ToString(), new Microsoft.AspNetCore.Http.CookieOptions { Expires = DateTime.UtcNow.AddYears(100) });
-
+                Order newOrder = new Order
+                {
+                    OrderItems = model.Cart.CartItems.Select(x => new OrderItem
+                    {
+                        ProductID = x.Product.ID,
+                        ProductName = x.Product.Name,
+                        ProductPrice = x.Product.Price,
+                        Quantity = x.Quantity
+                    }).ToArray()
+                };
+                _context.Orders.Add(newOrder);
+                _context.CartItems.RemoveRange(model.Cart.CartItems);
+                _context.Carts.Remove(model.Cart);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Order");
             }
-            CartItem item = cart.CartItems.FirstOrDefault(x => x.Product.ID == id);
-            if (item == null)
-            {
-                item = new CartItem();
-                item.Product = _context.Products.Find(id);
-                cart.CartItems.Add(item);
-            }
-
-            
-            cart.LastModified = DateTime.Now;
-            Order order = new Order();
-            OrderItem orderitem = order.OrderItems.FirstOrDefault(x => x.CartItem.ID == id);
-            if (orderitem == null)
-            {
-                orderitem = new OrderItem();
-                orderitem.CartItem = _context.CartItems.Find(id);
-                order.OrderItems.Add(orderitem);
-            }
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Order");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

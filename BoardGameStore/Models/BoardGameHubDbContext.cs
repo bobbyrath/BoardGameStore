@@ -56,8 +56,12 @@ namespace BoardGameStore.Models
 
     public class Order
     {
+        public Order()
+        {
+            this.OrderItems = new HashSet<OrderItem>();
+        }
         public int ID { get; set; }
-        public CheckoutViewModel CheckOutInfo { get; set; }
+        public string Email { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
     }
 
@@ -65,6 +69,9 @@ namespace BoardGameStore.Models
     {
         public int ID { get; set; }
         public Order order { get; set; }
-        public CartItem CartItem { get; set; }
+        public int ProductID { get; set; }
+        public string ProductName { get; set; }
+        public decimal? ProductPrice { get; set; }
+        public int Quantity { get; set; }
     }
 }
