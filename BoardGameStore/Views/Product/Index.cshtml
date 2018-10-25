@@ -18,10 +18,10 @@
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
                 <p class="card-text">@product.Description</p>
-                <a class="btn btn-primary" asp-controller="Product" asp-action="Details" asp-route-id="@product.ID">View Product</a>
+                <a class="btn btn-primary add-cart" asp-controller="Product" asp-action="Details" asp-route-id="@product.ID">View Product</a>
                 <form method="post" asp-action="Details">
                     <input name="ID" value="@product.ID" type="hidden" />
-                    <input type="submit" class="btn btn-primary" value="Add to Cart" />
+                    <input type="submit" class="btn btn-primary add-cart" value="Add to Cart" />
                 </form>
             </div>
         </div>

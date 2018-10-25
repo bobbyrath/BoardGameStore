@@ -8,13 +8,26 @@ namespace BoardGameStore.Models
 {
     public class CheckoutViewModel
     {
-        public int Id { get; set; }
+        [Required]
+        public string ContactEmail { get; set; }
+
         [Required]
         public string FirstName { get; set; }
+
         [Required]
         public string LastName { get; set; }
+
         [Required]
-        public string Email { get; set; }
-        public Cart Cart { get; set; }
+        public string ShippingStreet { get; set; }
+
+        [Required]
+        public string ShippingCity { get; set; }
+
+        [Required]
+        public string ShippingState { get; set; }
+
+        [Required]
+        public string ShippingPostalCode { get; set; }
+
     }
 }

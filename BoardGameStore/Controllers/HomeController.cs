@@ -37,6 +37,9 @@ namespace BoardGameStore.Controllers
         public IActionResult Trade()
         {
             return View();
+            // Find games for trade
+            // Suggest a game for trade - list what others are offering up for trade.  Suggest a trade. 
+            // if both accept, you now have traded and it should appear in your inventory. 
         }
     }
 }

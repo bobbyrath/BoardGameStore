@@ -19,38 +19,68 @@ namespace BoardGameStore.Controllers
 
         public IActionResult Index()
         {
-
-            Guid cartId;
-            Cart cart = null;
-            if (Request.Cookies.ContainsKey("cartId"))
+            Cart myCart = null;
+            if (User.Identity.IsAuthenticated)
             {
-                if (Guid.TryParse(Request.Cookies["cartId"], out cartId))
+                var currentUser = _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).First(x => x.UserName == User.Identity.Name);
+                if (currentUser.Cart != null)
                 {
-                    cart = _context.Carts
-                        .Include(carts => carts.CartItems)
-                        .ThenInclude(cartitems => cartitems.Product)
-                        .FirstOrDefault(x => x.CookieIdentifier == cartId);
+                    myCart = currentUser.Cart;
+                }
+                else if (Request.Cookies.ContainsKey("cartID"))
+                {
+                    if (Guid.TryParse(Request.Cookies["cartID"], out Guid cookieId))
+                    {
+                        myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cookieId);
+                    }
                 }
             }
-            if (cart == null)
+            else if (Request.Cookies.ContainsKey("cartID"))
             {
-                cart = new Cart();
+                if (Guid.TryParse(Request.Cookies["cartID"], out Guid cookieId))
+                {
+                    myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cookieId);
+                }
             }
-            return View(cart);
+
+            return View(myCart);
+
+        }
+
+        [HttpPost]
+        public IActionResult Index(Cart model)
+        {
+            Cart myCart = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUser = _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).First(x => x.UserName == User.Identity.Name);
+                if (currentUser.Cart != null)
+                {
+                    myCart = currentUser.Cart;
+                }
+            }
+            else if (Request.Cookies.ContainsKey("cartID"))
+            {
+                if (Guid.TryParse(Request.Cookies["cartID"], out Guid cartID))
+                {
+                    myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cartID);
+                }
+            }
+            return View(myCart);
         }
 
         public IActionResult Remove(int id)
         {
-            Guid cartId;
+            Guid cartID;
             Cart cart = null;
-            if (Request.Cookies.ContainsKey("cartId"))
+            if (Request.Cookies.ContainsKey("cartID"))
             {
-                if (Guid.TryParse(Request.Cookies["cartId"], out cartId))
+                if (Guid.TryParse(Request.Cookies["cartID"], out cartID))
                 {
                     cart = _context.Carts
                         .Include(carts => carts.CartItems)
                         .ThenInclude(cartitems => cartitems.Product)
-                        .FirstOrDefault(x => x.CookieIdentifier == cartId);
+                        .FirstOrDefault(x => x.CookieIdentifier == cartID);
                 }
             }
             CartItem item = cart.CartItems.FirstOrDefault(x => x.ID == id);

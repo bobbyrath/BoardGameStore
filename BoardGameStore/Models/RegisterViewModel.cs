@@ -9,7 +9,7 @@ namespace BoardGameStore.Models
     public class RegisterViewModel
     {
         [Required]
-        [MinLength(5, ErrorMessage = "Not long enough")]
+        [MinLength(5, ErrorMessage = "Username isn't long enough")]
         public string UserName { get; set; }
 
         [Required]

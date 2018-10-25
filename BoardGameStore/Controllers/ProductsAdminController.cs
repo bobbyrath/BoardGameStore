@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BoardGameStore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BoardGameStore.Controllers
 {
@@ -33,7 +34,7 @@ namespace BoardGameStore.Controllers
             }
 
             var product = await _context.Products
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (product == null)
             {
                 return NotFound();
@@ -72,7 +73,7 @@ namespace BoardGameStore.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -124,7 +125,7 @@ namespace BoardGameStore.Controllers
             }
 
             var product = await _context.Products
-                .SingleOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (product == null)
             {
                 return NotFound();
@@ -138,7 +139,7 @@ namespace BoardGameStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.ID == id);
+            var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

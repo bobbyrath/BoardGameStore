@@ -7,7 +7,7 @@
 @if (Model.CartItems.Count == 0)
 {
     <p>You have no items in your cart!</p>
-    <a asp-action="Index" asp-controller="Home">Go Home</a>
+    <a asp-action="Index" asp-controller="Product">Go Buy Some!</a>
 }
 else
 {
@@ -19,7 +19,15 @@ else
                 <td>@item.Product.Description</td>
                 <td><img src="@item.Product.Image" class="img-fluid" /></td>
                 <td>@((item.Product.Price ?? 0).ToString("c"))</td>
-                <td>@item.Quantity</td>
+                @*<td>@item.Quantity</td>*@
+                <td>
+                    <select name="quantity">
+                        @for (int i = 1; i < 11; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </td>
                 <td>@((item.Quantity * (item.Product.Price ?? 0)).ToString("c"))</td>
                 <td>
                     <form method="post" asp-action="remove">
@@ -31,18 +39,5 @@ else
 
         }
     </table>
-    @if (Model.CartItems.Count > 0 && !User.Identity.IsAuthenticated)
-    {
-        <form method="post" asp-controller="Account" asp-action="Login">
-            <input type="submit" value="Checkout" class="btn btn-primary" />
-        </form>
-    }
-    else if (Model.CartItems.Count > 0 && User.Identity.IsAuthenticated)
-    {
-        <form method="post" asp-controller="Checkout" asp-action="Index">
-            <input type="submit" value="Checkout" class="btn btn-primary" />
-        </form>
-    }
-
-
+        <a asp-action="index" asp-controller="checkout" class="btn btn-primary">Checkout</a>
 }

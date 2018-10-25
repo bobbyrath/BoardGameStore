@@ -11,8 +11,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace BoardGameStore.Controllers
 {
-   
-
     public class ProductController : Controller
     {
         private readonly BoardGameHubDbContext _context;
@@ -20,6 +18,11 @@ namespace BoardGameStore.Controllers
         public ProductController(BoardGameHubDbContext context)
         {
             _context = context;
+        }
+
+        public IActionResult Empty()
+        {
+            return View();
         }
 
         public async Task<IActionResult> Index(string searchString)
@@ -30,8 +33,11 @@ namespace BoardGameStore.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 games = games.Where(s => s.Name.Contains(searchString));
+                if (games.ToList().Count == 0)
+                {
+                    return RedirectToAction("Empty", "Product");
+                }
             }
-
             return View(await games.ToListAsync());
         }
 

@@ -1,6 +1,8 @@
 ﻿/* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
-
+.add-cart {
+    margin-top: 1em;
+}
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
@@ -40,4 +42,5 @@
         display: none;
     }
 }
+
 

@@ -14,11 +14,13 @@ namespace BoardGameStore.Controllers
     {
         SignInManager<BoardGameHubUser> _signInManager { get; set; }
         UserManager<BoardGameHubUser> _userManager { get; set; }
+        private BoardGameHubDbContext _context { get; set; }
 
-        public AccountController(SignInManager<BoardGameHubUser> signInManager, UserManager<BoardGameHubUser> userManager)
+        public AccountController(SignInManager<BoardGameHubUser> signInManager, UserManager<BoardGameHubUser> userManager, BoardGameHubDbContext context)
         {
             this._signInManager = signInManager;
             this._userManager = userManager;
+            this._context = context;
         }
 
         public IActionResult Index()

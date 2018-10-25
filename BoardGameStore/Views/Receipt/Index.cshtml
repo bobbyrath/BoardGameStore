@@ -1,0 +1,14 @@
+﻿@model BoardGameStore.Models.Order
+@{
+    ViewData["Title"] = "Order " + Model.ID;
+}
+
+<h2>Order @Model.ID</h2>
+<h3>You purchased:</h3>
+<ul>
+    @foreach (var item in Model.OrderItems)
+    {
+        <li>@item.Name : @item.Quantity</li>
+    }
+
+</ul>

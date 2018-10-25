@@ -19,56 +19,97 @@ namespace BoardGameStore.Controllers
             _context = context;
         }
 
-
-        private async Task GetCurrentCart(CheckoutViewModel model)
+        public IActionResult Index()
         {
-            Guid cartId;
-            Cart cart = null;
+            CheckoutViewModel model = new CheckoutViewModel();
             if (User.Identity.IsAuthenticated)
             {
-                var currentUser = await _signInManager.UserManager.GetUserAsync(User);
-                model.Email = currentUser.Email;
+                var currentUser = _context.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+                model.ContactEmail = currentUser.Email;
                 model.FirstName = currentUser.FirstName;
                 model.LastName = currentUser.LastName;
             }
-
-            if (Request.Cookies.ContainsKey("cartId"))
-            {
-                if (Guid.TryParse(Request.Cookies["cartId"], out cartId))
-                {
-                    cart = await _context.Carts
-                        .Include(carts => carts.CartItems)
-                        .ThenInclude(cartitems => cartitems.Product)
-                        .FirstOrDefaultAsync(x => x.CookieIdentifier == cartId);
-                }
-            }
-            model.Cart = cart;
+            return View(model);
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Index(CheckoutViewModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(CheckoutViewModel model)
         {
-            await GetCurrentCart(model);
             if (ModelState.IsValid)
             {
-                Order newOrder = new Order
+                // TODO: Do some more advanced validation 
+                //  - the address info is required, but is it real? I can use an API to find out!
+                //  - the credit card is required, but does it have available funds?  Again, I can use an API
+
+                Cart myCart = null;
+                if (User.Identity.IsAuthenticated)
                 {
-                    OrderItems = model.Cart.CartItems.Select(x => new OrderItem
+                    var currentUser = _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).First(x => x.UserName == User.Identity.Name);
+                    if (currentUser.Cart != null)
                     {
-                        ProductID = x.Product.ID,
-                        ProductName = x.Product.Name,
-                        ProductPrice = x.Product.Price,
-                        Quantity = x.Quantity
-                    }).ToArray()
-                };
-                _context.Orders.Add(newOrder);
-                _context.CartItems.RemoveRange(model.Cart.CartItems);
-                _context.Carts.Remove(model.Cart);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Order");
+                        myCart = currentUser.Cart;
+                    }
+                }
+                else if (Request.Cookies.ContainsKey("cartID"))
+                {
+                    if (Guid.TryParse(Request.Cookies["cartID"], out Guid cartID))
+                    {
+                        myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cartID);
+                    }
+                }
+                if (myCart == null)
+                {
+                    ModelState.AddModelError("Cart", "There was a problem with your cart, please check your cart to verify that all items are correct");
+                }
+                else
+                {
+                    // Take the existing cart, and convert the cart and cart items to an  "order" with "order items"
+                    //  - when creating order items, I'm going to "denormalize" the info to copy the price, description, etc. of what the customer ordered.
+                    Order order = new Order
+                    {
+                        ContactEmail = model.ContactEmail,
+                        Created = DateTime.UtcNow,
+                        FirstName = model.FirstName,
+                        LastModified = DateTime.UtcNow,
+                        LastName = model.LastName,
+                        ShippingCity = model.ShippingCity,
+                        ShippingPostalCode = model.ShippingPostalCode,
+                        ShippingState = model.ShippingState,
+                        ShippingStreet = model.ShippingStreet,
+                        OrderItems = myCart.CartItems.Select(x => new OrderItem
+                        {
+                            Created = DateTime.UtcNow,
+                            LastModified = DateTime.UtcNow,
+                            Description = x.Product.Description,
+                            ProductID = x.Product.ID,
+                            Name = x.Product.Name,
+                            Price = x.Product.Price,
+                            Quantity = x.Quantity
+                        }).ToHashSet()
+                    };
+
+                    _context.Orders.Add(order);
+                    // Delete the cart, cart items, and clear the cookie or "user cart" info so that the user will get a new cart next time.
+                    _context.Carts.Remove(myCart);
+
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var currentUser = _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).First(x => x.UserName == User.Identity.Name);
+                        currentUser.Cart = null;
+                    }
+                    Response.Cookies.Delete("cartID");
+
+                    _context.SaveChanges();
+
+
+                    // TODO: Email the user to let them know their order has been placed. -- I need an API for this!
+
+                    // Redirect to the receipt page
+                    return RedirectToAction("Index", "Receipt", new { ID = order.ID });
+                }
             }
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
     }
 }

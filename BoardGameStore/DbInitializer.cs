@@ -9,7 +9,7 @@ namespace BoardGameStore
     {
         internal static void Initialize(this BoardGameHubDbContext db)
         {
-            db.Database.Migrate();
+           
 
             if (db.Products.Count() == 0)
             {
