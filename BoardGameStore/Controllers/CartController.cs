@@ -33,7 +33,7 @@ namespace BoardGameStore.Controllers
                     {
                         myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cookieId);
                     }
-                }
+                } 
             }
             else if (Request.Cookies.ContainsKey("cartID"))
             {

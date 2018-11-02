@@ -41,7 +41,17 @@ namespace BoardGameStore
             })
                 .AddEntityFrameworkStores<BoardGameHubDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddTransient((s) => {
+                return new SendGrid.SendGridClient(Configuration.GetValue<string>("SendGridKey"));
+            });
+            services.AddTransient<Braintree.IBraintreeGateway>((s) => {
+                return new Braintree.BraintreeGateway(
+                    Configuration.GetValue<string>("BraintreeEnvironment"),
+                    Configuration.GetValue<string>("BraintreeMerchantID"),
+                    Configuration.GetValue<string>("BraintreePublicKey"),
+                    Configuration.GetValue<string>("BraintreePrivateKey")
+                );
+            });
             services.AddMvc();
         }
 

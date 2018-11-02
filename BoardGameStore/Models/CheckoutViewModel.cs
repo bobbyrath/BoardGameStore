@@ -29,5 +29,10 @@ namespace BoardGameStore.Models
         [Required]
         public string ShippingPostalCode { get; set; }
 
+        public string CreditCardNumber { get; set; }
+        public int? CreditCardExpirationMonth { get; set; }
+        public int? CreditCardExpirationYear { get; set; }
+        public string CreditCardVerificationValue { get; set; }
+        public bool? CreditCardSave { get; set; }
     }
 }

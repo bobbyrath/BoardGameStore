@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BoardGameStore.Migrations
 {
-    public partial class Identity : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,6 +35,18 @@ namespace BoardGameStore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Carts", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Inventories",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Inventories", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,6 +137,27 @@ namespace BoardGameStore.Migrations
                         name: "FK_AspNetUsers_Carts_CartID",
                         column: x => x.CartID,
                         principalTable: "Carts",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryItems",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    IsTradeable = table.Column<bool>(nullable: false),
+                    InventoryID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItems", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_InventoryItems_Inventories_InventoryID",
+                        column: x => x.InventoryID,
+                        principalTable: "Inventories",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -325,6 +358,11 @@ namespace BoardGameStore.Migrations
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InventoryItems_InventoryID",
+                table: "InventoryItems",
+                column: "InventoryID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderID",
                 table: "OrderItems",
                 column: "OrderID");
@@ -351,6 +389,9 @@ namespace BoardGameStore.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
+                name: "InventoryItems");
+
+            migrationBuilder.DropTable(
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
@@ -361,6 +402,9 @@ namespace BoardGameStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Inventories");
 
             migrationBuilder.DropTable(
                 name: "Orders");

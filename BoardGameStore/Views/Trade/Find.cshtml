@@ -1,0 +1,24 @@
+﻿@model IEnumerable<BoardGameHubUser>
+
+@{
+    ViewData["Title"] = "Find";
+}
+
+<h2>Find</h2>
+
+@foreach (var user in Model)
+{
+    @foreach (var item in user.Inventory.InventoryItems)
+    {
+        <table>
+            <tr>
+                @if (item.IsTradeable)
+                {
+                    <td>@item.Name</td>
+                    <td>@user.UserName</td>
+                }
+            </tr>
+        </table>
+    }
+}
+

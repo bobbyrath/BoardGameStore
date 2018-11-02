@@ -53,8 +53,9 @@ namespace BoardGameStore.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber
+                    
                 };
-
+                
                 IdentityResult creationResult = this._signInManager.UserManager.CreateAsync(newUser).Result;
                 if (creationResult.Succeeded)
                 {
@@ -62,7 +63,14 @@ namespace BoardGameStore.Controllers
                     if (passwordResult.Succeeded)
                     {
                         this._signInManager.SignInAsync(newUser, false);
+                        newUser.Inventory = new Inventory
+                        {
+                            UserID = newUser.Id
+                        };
+                        _context.Add(newUser.Inventory);
+                        _context.SaveChanges();
                         return RedirectToAction("Index", "Home");
+
                     }
                     else
                     {

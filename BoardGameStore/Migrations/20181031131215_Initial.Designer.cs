@@ -4,14 +4,16 @@ using BoardGameStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoardGameStore.Migrations
 {
     [DbContext(typeof(BoardGameHubDbContext))]
-    partial class BoardGameHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181031131215_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,8 +39,6 @@ namespace BoardGameStore.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName");
-
-                    b.Property<int?>("InventoryID");
 
                     b.Property<string>("LastName");
 
@@ -68,8 +68,6 @@ namespace BoardGameStore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CartID");
-
-                    b.HasIndex("InventoryID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -349,10 +347,6 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Cart", "Cart")
                         .WithMany()
                         .HasForeignKey("CartID");
-
-                    b.HasOne("BoardGameStore.Models.Inventory", "Inventory")
-                        .WithMany()
-                        .HasForeignKey("InventoryID");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.CartItem", b =>

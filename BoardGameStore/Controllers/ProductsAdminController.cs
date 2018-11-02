@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BoardGameStore.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BoardGameStore.Controllers
 {
     public class ProductsAdminController : Controller
     {
         private readonly BoardGameHubDbContext _context;
+        private readonly UserManager<BoardGameHubUser> _userManager;
 
-        public ProductsAdminController(BoardGameHubDbContext context)
+        public ProductsAdminController(BoardGameHubDbContext context, UserManager<BoardGameHubUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ProductsAdmin

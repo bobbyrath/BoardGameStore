@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BoardGameStore.Migrations
 {
     [DbContext(typeof(BoardGameHubDbContext))]
-    [Migration("20181025172344_Identity")]
-    partial class Identity
+    [Migration("20181031131432_Inventory")]
+    partial class Inventory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,8 @@ namespace BoardGameStore.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName");
+
+                    b.Property<int?>("InventryID");
 
                     b.Property<string>("LastName");
 
@@ -68,6 +70,8 @@ namespace BoardGameStore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CartID");
+
+                    b.HasIndex("InventryID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -120,6 +124,36 @@ namespace BoardGameStore.Migrations
                     b.HasIndex("ProductID");
 
                     b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("BoardGameStore.Models.Inventory", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("BoardGameStore.Models.InventoryItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("InventoryID");
+
+                    b.Property<bool>("IsTradeable");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("InventoryID");
+
+                    b.ToTable("InventoryItems");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.Order", b =>
@@ -317,6 +351,10 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Cart", "Cart")
                         .WithMany()
                         .HasForeignKey("CartID");
+
+                    b.HasOne("BoardGameStore.Models.Inventory", "Inventry")
+                        .WithMany()
+                        .HasForeignKey("InventryID");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.CartItem", b =>
@@ -328,6 +366,13 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID");
+                });
+
+            modelBuilder.Entity("BoardGameStore.Models.InventoryItem", b =>
+                {
+                    b.HasOne("BoardGameStore.Models.Inventory", "Inventory")
+                        .WithMany("InventoryItems")
+                        .HasForeignKey("InventoryID");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.OrderItem", b =>

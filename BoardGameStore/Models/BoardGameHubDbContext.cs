@@ -35,6 +35,8 @@ namespace BoardGameStore.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Cart Cart { get; set; }
+        public Inventory Inventory { get; set; }
+     
     }
 
     public class Product
@@ -53,7 +55,6 @@ namespace BoardGameStore.Models
         public Cart()
         {
             this.CartItems = new HashSet<CartItem>();
-
         }
 
         public int ID { get; set; }
@@ -112,9 +113,14 @@ namespace BoardGameStore.Models
 
     public class Inventory
     {
+        public Inventory()
+        {
+            this.InventoryItems = new HashSet<InventoryItem>();
+        }
         public int ID { get; set; }
-        public BoardGameHubUser User { get; set; }
+        public string UserID { get; set; }
         public ICollection<InventoryItem> InventoryItems { get; set; }
+       
     }
 
     public class InventoryItem

@@ -6,29 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20180514154530_Identity.cs" />
-    <Compile Remove="Migrations\20180514154530_Identity.Designer.cs" />
-    <Compile Remove="Migrations\20180514160839_FirstLastName.cs" />
-    <Compile Remove="Migrations\20180514160839_FirstLastName.Designer.cs" />
-    <Compile Remove="Migrations\20180514163845_EmailPhone.cs" />
-    <Compile Remove="Migrations\20180514163845_EmailPhone.Designer.cs" />
-    <Compile Remove="Migrations\20180514182532_DbSetProduct.cs" />
-    <Compile Remove="Migrations\20180514182532_DbSetProduct.Designer.cs" />
-    <Compile Remove="Migrations\20180516164838_Cart.cs" />
-    <Compile Remove="Migrations\20180516164838_Cart.Designer.cs" />
-    <Compile Remove="Migrations\20180521024032_Order.cs" />
-    <Compile Remove="Migrations\20180521024032_Order.Designer.cs" />
-    <Compile Remove="Migrations\20181020191606_OrderItem.cs" />
-    <Compile Remove="Migrations\20181020191606_OrderItem.Designer.cs" />
-    <Compile Remove="Migrations\20181025165112_Orderitems.cs" />
-    <Compile Remove="Migrations\20181025165112_Orderitems.Designer.cs" />
-    <Compile Remove="Migrations\20181025170708_Added Cart to User.cs" />
-    <Compile Remove="Migrations\20181025170708_Added Cart to User.Designer.cs" />
-    <Compile Remove="Migrations\20181025171830_test.cs" />
-    <Compile Remove="Migrations\20181025171830_test.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Braintree" Version="4.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.3" />
@@ -38,6 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+    <PackageReference Include="Sendgrid" Version="9.10.0" />
   </ItemGroup>
 
   <ItemGroup>

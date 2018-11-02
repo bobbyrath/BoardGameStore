@@ -1,0 +1,31 @@
+﻿@model Inventory
+
+
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+@* Display inventory belonging to current user
+@* Display all inventory items belonging to the inventory of that user *@
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@if (Model == null)
+{
+    <h2>@User.Identity.Name, your inventory is currently empty</h2>
+}
+else
+{
+    <table>
+        @foreach (var item in Model.InventoryItems)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.IsTradeable</td>
+                <td>@User.Identity.Name</td>
+            </tr>
+        }
+    </table>
+}

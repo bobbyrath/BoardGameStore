@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BoardGameStore.Migrations
 {
     [DbContext(typeof(BoardGameHubDbContext))]
-    [Migration("20181025214326_Trade")]
-    partial class Trade
+    [Migration("20181031131543_Inventory2")]
+    partial class Inventory2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,8 @@ namespace BoardGameStore.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName");
+
+                    b.Property<int?>("InventoryID");
 
                     b.Property<string>("LastName");
 
@@ -68,6 +70,8 @@ namespace BoardGameStore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CartID");
+
+                    b.HasIndex("InventoryID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -128,11 +132,7 @@ namespace BoardGameStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("UserId");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Inventories");
                 });
@@ -351,6 +351,10 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Cart", "Cart")
                         .WithMany()
                         .HasForeignKey("CartID");
+
+                    b.HasOne("BoardGameStore.Models.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("InventoryID");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.CartItem", b =>
@@ -362,13 +366,6 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID");
-                });
-
-            modelBuilder.Entity("BoardGameStore.Models.Inventory", b =>
-                {
-                    b.HasOne("BoardGameStore.Models.BoardGameHubUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.InventoryItem", b =>

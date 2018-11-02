@@ -4,12 +4,7 @@
 }
 
 <h2>Cart</h2>
-@if (Model.CartItems.Count == 0)
-{
-    <p>You have no items in your cart!</p>
-    <a asp-action="Index" asp-controller="Product">Go Buy Some!</a>
-}
-else
+@if (Model.CartItems.Count >= 1)
 {
     <table class="table table-striped">
         @foreach (var item in Model.CartItems)
@@ -39,5 +34,10 @@ else
 
         }
     </table>
-        <a asp-action="index" asp-controller="checkout" class="btn btn-primary">Checkout</a>
+    <a asp-action="index" asp-controller="checkout" class="btn btn-primary">Checkout</a>
+}
+else
+{
+    <p>You have no items in your cart!</p>
+    <a asp-action="Index" asp-controller="Product">Go Buy Some!</a>
 }
