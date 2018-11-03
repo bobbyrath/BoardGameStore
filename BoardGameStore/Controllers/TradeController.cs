@@ -27,8 +27,6 @@ namespace BoardGameStore.Controllers
             return View();
         }
 
-        //Inject context in, pass in userID, display all based on that userID.
-
         public async Task<IActionResult> Inventory()
         {
             Inventory inventory = null;
@@ -51,9 +49,13 @@ namespace BoardGameStore.Controllers
 
         public async Task<IActionResult> Find()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var user = await GetCurrentUserAsync();
-            var newView = _context.Users.Include(x => x.Inventory).ThenInclude(x => x.InventoryItems).Where(x => x.UserName != user.UserName);
-            return View(newView.ToList());
+            var newUser = _context.Users.Include(x => x.Inventory).ThenInclude(x => x.InventoryItems).Where(x => x.UserName != user.UserName);
+            return View(newUser.ToList());
         }
 
         [HttpPost]
@@ -74,6 +76,30 @@ namespace BoardGameStore.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("Inventory", "Trade");
+        }
+
+        public IActionResult Propose(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var game = _context.InventoryItems.FirstOrDefault(m => m.ID == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+            return View(game);
+        }
+
+        
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _context.InventoryItems.FindAsync(id);
+            _context.InventoryItems.Remove(item);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Inventory");
         }
     }
 }

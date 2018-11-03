@@ -4,21 +4,38 @@
     ViewData["Title"] = "Find";
 }
 
-<h2>Find</h2>
+<h2>Games available for trade</h2>
 
-@foreach (var user in Model)
-{
-    @foreach (var item in user.Inventory.InventoryItems)
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">User</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    @foreach (var user in Model)
     {
-        <table>
-            <tr>
-                @if (item.IsTradeable)
-                {
-                    <td>@item.Name</td>
-                    <td>@user.UserName</td>
-                }
-            </tr>
-        </table>
+        @foreach (var item in user.Inventory.InventoryItems)
+        {
+            <tbody>
+                <tr>
+                    @if (item.IsTradeable)
+                    {
+                        <td>@item.ID</td>
+                        <td>@item.Name</td>
+                        <td>@user.UserName</td>
+                        <td>
+                            <a asp-action="Propose" asp-route-id="@item.ID" class="btn btn-primary">Propose</a>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        }
     }
-}
-
+</table>
+<p class="lead">
+    <a asp-action="Create" class="btn btn-primary">Add Item</a>
+    <a class="btn btn-primary" asp-action="Inventory">View Inventory</a>
+</p>

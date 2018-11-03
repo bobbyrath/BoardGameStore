@@ -4,9 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Add new item</h2>
 
-<h4>InventoryItem</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -31,7 +30,9 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Inventory">Back to List</a>
-</div>
+<p class="lead">
+    <a class="btn btn-primary" asp-action="Inventory">View Inventory</a>
+    <a class="btn btn-primary" asp-action="Find">Find Trade</a>
+</p>       
+
 
