@@ -5,9 +5,19 @@
 }
 
 @* Display inventory belonging to current user
-@* Display all inventory items belonging to the inventory of that user *@
-
-<h2><strong>@User.Identity.Name</strong>, you currently have @Model.InventoryItems.Count games in your inventory</h2>
+    @* Display all inventory items belonging to the inventory of that user *@
+@if (Model.InventoryItems.Count == 0)
+{
+    <h2><strong>@User.Identity.Name</strong>, your inventory is empty</h2>
+}
+else if (Model.InventoryItems.Count == 1)
+{
+    <h2><strong>@User.Identity.Name</strong>, you currently have @Model.InventoryItems.Count game in your inventory</h2>
+}
+else
+{
+    <h2><strong>@User.Identity.Name</strong>, you currently have @Model.InventoryItems.Count games in your inventory</h2>
+}
 <br />
 @if (Model == null)
 {
@@ -21,7 +31,7 @@ else
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Trade?</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -30,13 +40,17 @@ else
                 <tr>
                     <td>@item.ID</td>
                     <td>@item.Name</td>
-                    <td>@item.IsTradeable</td>
+                    @if (item.IsTradeable)
+                    {
+                        <td>Willing to trade</td>
+                    }
+                    else
+                    {
+                        <td>Not willing to trade</td>
+                    }
                     <td>
-                        @*<form asp-action="Delete" method="post">
-                            <input type="hidden" asp-for="@item" />
-                            <input type="submit" value="Delete" class="btn btn-sm" />
-                        </form>*@
-                        <form method="post" asp-action="Delete">
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-primary">Edit</a>
+                        <form class="inv" method="post" asp-action="Delete">
                             <input type="hidden" name="id" value="@item.ID" />
                             <input type="submit" value="Delete" class="btn btn-primary" />
                         </form>

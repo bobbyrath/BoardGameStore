@@ -101,5 +101,28 @@ namespace BoardGameStore.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Inventory");
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var item = await _context.InventoryItems.FindAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,IsTradeable, Inventory")] InventoryItem item)
+        {
+            _context.Update(item);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Inventory");
+        }
     }
 }

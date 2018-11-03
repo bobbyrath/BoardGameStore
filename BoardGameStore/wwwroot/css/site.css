@@ -26,6 +26,11 @@
 .container {
     margin: 0;
 }
+
+.inv {
+    display: inline-block;
+}
+
 .jumbotron {
     margin-top: 2em;
 }

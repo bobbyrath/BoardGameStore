@@ -1,16 +1,17 @@
 ﻿@model BoardGameStore.Models.InventoryItem
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h2>Add new item</h2>
+<h2>Edit</h2>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -19,20 +20,18 @@
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input asp-for="IsTradeable" /> Check if willing to trade
+                        <input asp-for="IsTradeable" /> @Html.DisplayNameFor(model => model.IsTradeable)
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
-<p class="lead">
+<div>
     <a class="btn btn-primary" asp-action="Inventory">View Inventory</a>
-    <a class="btn btn-primary" asp-action="Find">Find Trade</a>
-</p>       
-
+</div>
 
