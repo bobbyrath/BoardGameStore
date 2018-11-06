@@ -17,7 +17,7 @@
 }
 
 <h2 class="text-center">Login</h2>
-<form method="post">
+<form method="post" class="login">
     <div class="form-group">
         <label for="username">User Name</label>
         <input name="username" class="form-control" type="text" placeholder="Enter your username..." />
@@ -26,7 +26,11 @@
         <label for="password">Password</label>
         <input name="password" class="form-control" type="password" placeholder="Enter your password..." />
     </div>
-    <input type="submit" class="btn btn-primary" />
+    <input type="submit" class="btn btn-primary login-button" />
 </form>
+<p class="text-center new">New to BoardGameHub?</p>
 
+<form class="register">
+    <a class="btn btn-light register-button" asp-action="Register">Register</a>
+</form>
 

@@ -4,8 +4,9 @@
     ViewData["Title"] = "Find";
 }
 
-<h2>Games available for trade</h2>
 
+
+<h2>Games available for trade</h2>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -15,6 +16,7 @@
             <th scope="col"></th>
         </tr>
     </thead>
+    @{ var count = 0;}
     @foreach (var user in Model)
     {
         @foreach (var item in user.Inventory.InventoryItems)
@@ -27,8 +29,9 @@
                         <td>@item.Name</td>
                         <td>@user.UserName</td>
                         <td>
-                            <a asp-controller="Trade" asp-action="Propose" asp-route-proposeeid="@user.Id" asp-route-id="@item.ID" class="btn btn-primary">Propose</a>
+                            <a asp-controller="Trade" asp-action="Propose" asp-route-proposeeid="@user.Id" asp-route-id="@item.ID" class="btn btn-danger">Propose</a>
                         </td>
+                        count++;
                     }
                 </tr>
             </tbody>

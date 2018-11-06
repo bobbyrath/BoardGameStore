@@ -23,28 +23,34 @@
                     <a class="nav-link" asp-controller="Trade" asp-action="Index">Trade</a>
                 </li>
 
+               
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav ml-auto mr-lg-2">
                 @if (!User.Identity.IsAuthenticated)
                 {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Login">Log In</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Login">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                    </li>
                 }
-                else 
+                else
                 {
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Account" asp-action="Logout">Sign Out as @User.Identity.Name </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Logout">Sign out as @User.Identity.Name </a>
+                    </li>
                 }
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" asp-controller="Cart" asp-action="Index">Cart</a>
                 </li>
             </ul>
-            <form class="form-inline"  asp-controller="Product" asp-action="Index">
+            <form class="form-inline" asp-controller="Product" asp-action="Index">
+
                 <input class="form-control mr-sm-2" type="search" name="searchString" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
     </nav>
@@ -54,7 +60,7 @@
         @RenderBody()
 
         <footer>
-            <p>&copy; 2018 - BGH</p>
+            
         </footer>
     </div>
 

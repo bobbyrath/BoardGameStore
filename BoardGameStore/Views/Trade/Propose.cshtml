@@ -8,23 +8,26 @@
 <h3>Owned by: @Model.Proposee.UserName</h3>
 
 <h4>Please pick one of your games that you are willing to trade this for</h4>
-    <table class="table table-striped">
-        @foreach (var item in Model.Proposer.Inventory.InventoryItems)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>
-                    <form class="inv" method="post" asp-action="Propose">
-                        @Html.HiddenFor(model => Model.Proposee.UserName)
-                        @Html.HiddenFor(model => Model.ProposeeItem.ID)
-                        @Html.HiddenFor(model => Model.Proposer.UserName)
-                        <input type="hidden" name="id" value="@item.ID" />
-                        <input type="submit" value="Send Trade Request" class="btn btn-primary" />
-                    </form>
-                </td>
-            </tr>
-        }
-    </table>
+<table class="table table-striped">
+    @foreach (var item in Model.Proposer.Inventory.InventoryItems)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>
+                <form class="inv" method="post" asp-action="Propose">
+                    @Html.HiddenFor(model => Model.Proposee.UserName)
+                    @Html.HiddenFor(model => Model.ProposeeItem.ID)
+                    @Html.HiddenFor(model => Model.Proposer.UserName)
+                    <input type="hidden" name="id" value="@item.ID" />
+                    <input type="submit" value="Send Trade Request" class="btn btn-primary" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+<a class="btn btn-primary" asp-action="Inventory">View Inventory</a>
+<a class="btn btn-primary" asp-action="Find">Find Another Trade</a>
 
 
 

@@ -49,14 +49,14 @@ else
                         <td>Not willing to trade</td>
                     }
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-primary">Edit</a>
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-outline-primary">Edit</a>
                             <form class="inv" method="post" asp-action="Delete">
                                 <input type="hidden" name="id" value="@item.ID" />
-                                <input type="submit" value="Delete" class="btn btn-primary" />
+                                <input type="submit" value="Delete" class="btn btn-outline-primary" />
                             </form>
                             @if (item.IsWanted == true || item.IsGiving == true)
                             {
-                                <a asp-controller="Proposal" asp-action="Details" asp-route-id="@item.ID" class="btn btn-light">Trade Pending</a>
+                                <a asp-controller="Proposal" asp-action="Details" asp-route-id="@item.ID" class="btn btn-success">Trade Pending</a>
                             }
                         </td>
                 </tr>
