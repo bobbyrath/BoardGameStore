@@ -9200,6 +9200,12 @@ button.bg-dark:focus {
   }
 }
 
+@media (min-width: 892px){
+    .loginul {
+        display: none;
+    }
+}
+
 @media (min-width: 992px) {
   .text-lg-left {
     text-align: left !important;

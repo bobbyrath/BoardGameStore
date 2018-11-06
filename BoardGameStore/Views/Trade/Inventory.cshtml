@@ -56,7 +56,7 @@ else
                             </form>
                             @if (item.IsWanted == true || item.IsGiving == true)
                             {
-                                <a asp-controller="Proposal" asp-action="Details" asp-route-id="@item.ID" class="btn btn-success">Trade Pending</a>
+                                <a asp-controller="Proposal" asp-action="Details" asp-route-id="@item.ID" class="btn btn-light">Trade Pending</a>
                             }
                         </td>
                 </tr>

@@ -3,37 +3,53 @@
     ViewData["Title"] = "Index";
 }
 
-
 @if (Model.CartItems.Count >= 1)
 {
     <h2>Shopping Cart</h2>
     <table class="table table-striped">
-        @foreach (var item in Model.CartItems)
-        {
+        <thead>
             <tr>
-                <td>@item.Product.Name</td>
-                <td>@item.Product.Description</td>
-                <td><img src="@item.Product.Image" class="img-fluid" /></td>
-                <td>@((item.Product.Price ?? 0).ToString("c"))</td>
-                @*<td>@item.Quantity</td>*@
-                <td>
-                    <select name="quantity">
-                        @for (int i = 1; i < 11; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
-                    </select>
-                </td>
-                <td>@((item.Quantity * (item.Product.Price ?? 0)).ToString("c"))</td>
-                <td>
-                    <form method="post" asp-action="remove">
-                        <input type="hidden" name="id" value="@item.ID" />
-                        <input type="submit" value="Remove" class="btn btn-primary" />
-                    </form>
-                </td>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Line Total</th>
+                <th></th>
             </tr>
-
-        }
+        </thead>
+        @{ decimal total = 0; }
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Product.Description</td>
+                        @*<td><img src="@item.Product.Image" class="img-fluid" /></td>*@
+                        <td>@((item.Product.Price ?? 0).ToString("c"))</td>
+                        <td>@item.Quantity</td>
+                        <td>@((item.Quantity * (item.Product.Price ?? 0)).ToString("c"))</td>
+                        @{ total = total + (item.Quantity * (item.Product.Price ?? 0));}
+                        <td>
+                            <form method="post" asp-action="remove">
+                                <input type="hidden" name="id" value="@item.ID" />
+                                <input type="submit" value="Remove" class="btn btn-primary" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>@total.ToString("c")</td>
+                    <td></td>
+                </tr>
+               
+            </tfoot>
+       
     </table>
     <a asp-action="index" asp-controller="checkout" class="btn btn-primary">Checkout</a>
 }
