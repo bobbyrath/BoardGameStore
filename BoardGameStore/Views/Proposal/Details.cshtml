@@ -1,0 +1,17 @@
+﻿@model Proposal
+@{
+    ViewData["Title"] = "Details";
+}
+
+<p>Proposer: @Model.Proposer</p>
+<p>ProposerItem: @Model.ProposerItem</p>
+<p>Proposee: @Model.Proposee</p>
+<p>ProposeeItem:  @Model.ProposeeItem</p>
+
+@if (Model.Proposee == User.Identity.Name)
+{
+    <form method="post" asp-controller="Trade" asp-action="Accept">
+        <input type="hidden" name="id" value="@Model.ID" />
+        <input type="submit" value="Accept Trade" class="btn btn-primary" />
+    </form>
+}

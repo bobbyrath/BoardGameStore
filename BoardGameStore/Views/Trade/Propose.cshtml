@@ -1,17 +1,30 @@
-﻿@model InventoryItem
+﻿@model ProposalViewModel
 
 @{
     ViewData["Title"] = "Propose";
 }
 
-<h2>You would like to trade for the following game</h2>
-<table>
-    <tr>
-        <td>@Model.ID</td>
-        <td>@Model.Name</td>
-    </tr>
-</table>
+<h2>Game desired: @Model.ProposeeItem.Name</h2>
+<h3>Owned by: @Model.Proposee.UserName</h3>
 
-<h2>Which games are you offering up for trade?</h2>
+<h4>Please pick one of your games that you are willing to trade this for</h4>
+    <table class="table table-striped">
+        @foreach (var item in Model.Proposer.Inventory.InventoryItems)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    <form class="inv" method="post" asp-action="Propose">
+                        @Html.HiddenFor(model => Model.Proposee.UserName)
+                        @Html.HiddenFor(model => Model.ProposeeItem.ID)
+                        @Html.HiddenFor(model => Model.Proposer.UserName)
+                        <input type="hidden" name="id" value="@item.ID" />
+                        <input type="submit" value="Send Trade Request" class="btn btn-primary" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+
 
 

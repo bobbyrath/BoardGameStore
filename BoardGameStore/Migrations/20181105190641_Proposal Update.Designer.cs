@@ -4,14 +4,16 @@ using BoardGameStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoardGameStore.Migrations
 {
     [DbContext(typeof(BoardGameHubDbContext))]
-    partial class BoardGameHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181105190641_Proposal Update")]
+    partial class ProposalUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,15 +252,19 @@ namespace BoardGameStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Proposee");
+                    b.Property<string>("BoardGameHubUserId");
 
-                    b.Property<string>("ProposeeItem");
+                    b.Property<string>("ProposeeID");
 
-                    b.Property<string>("Proposer");
+                    b.Property<int>("ProposeeItemID");
 
-                    b.Property<string>("ProposerItem");
+                    b.Property<string>("ProposerID");
+
+                    b.Property<int>("ProposerItemID");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("BoardGameHubUserId");
 
                     b.ToTable("Proposals");
                 });
@@ -411,6 +417,13 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderID");
+                });
+
+            modelBuilder.Entity("BoardGameStore.Models.Proposal", b =>
+                {
+                    b.HasOne("BoardGameStore.Models.BoardGameHubUser")
+                        .WithMany("Proposals")
+                        .HasForeignKey("BoardGameHubUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -4,14 +4,16 @@ using BoardGameStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoardGameStore.Migrations
 {
     [DbContext(typeof(BoardGameHubDbContext))]
-    partial class BoardGameHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181105183127_Giving")]
+    partial class Giving
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,13 +155,9 @@ namespace BoardGameStore.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("ProposalID");
-
                     b.HasKey("ID");
 
                     b.HasIndex("InventoryID");
-
-                    b.HasIndex("ProposalID");
 
                     b.ToTable("InventoryItems");
                 });
@@ -242,25 +240,6 @@ namespace BoardGameStore.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("BoardGameStore.Models.Proposal", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Proposee");
-
-                    b.Property<string>("ProposeeItem");
-
-                    b.Property<string>("Proposer");
-
-                    b.Property<string>("ProposerItem");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Proposals");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -400,10 +379,6 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Inventory", "Inventory")
                         .WithMany("InventoryItems")
                         .HasForeignKey("InventoryID");
-
-                    b.HasOne("BoardGameStore.Models.Proposal", "Proposal")
-                        .WithMany()
-                        .HasForeignKey("ProposalID");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.OrderItem", b =>

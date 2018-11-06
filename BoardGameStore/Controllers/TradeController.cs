@@ -15,7 +15,6 @@ namespace BoardGameStore.Controllers
         private readonly UserManager<BoardGameHubUser> _boardGameHubUser;
         private Task<BoardGameHubUser> GetCurrentUserAsync() => _boardGameHubUser.GetUserAsync(HttpContext.User);
 
-
         public TradeController(BoardGameHubDbContext context, UserManager<BoardGameHubUser> boardGameHubUser)
         {
             _context = context;
@@ -78,22 +77,38 @@ namespace BoardGameStore.Controllers
             return RedirectToAction("Inventory", "Trade");
         }
 
-        public IActionResult Propose(int? id)
+        public async Task<IActionResult> Propose(int id, string proposeeid)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var game = _context.InventoryItems.FirstOrDefault(m => m.ID == id);
-            if (game == null)
-            {
-                return NotFound();
-            }
-            return View(game);
+            ProposalViewModel model = new ProposalViewModel();
+            var currentUser = await GetCurrentUserAsync();
+            model.ProposeeItem = await _context.InventoryItems.FindAsync(id);
+            model.Proposee = await _context.Users.Include(x => x.Inventory).ThenInclude(x => x.InventoryItems).FirstAsync(x => x.Id == proposeeid);
+            model.Proposer = await _context.Users.Include(x => x.Inventory).ThenInclude(x => x.InventoryItems).FirstAsync(x => x.UserName == User.Identity.Name);
+            return View(model);
         }
 
-        
+        //This should mark IsWanted to true. 
+        [HttpPost]
+        public IActionResult Propose(ProposalViewModel model, int id)
+        {
+            Proposal proposal = new Proposal();
+            var givingItem = _context.InventoryItems.Find(id);
+            var wantedItem = _context.InventoryItems.Find(model.ProposeeItem.ID);
+            givingItem.IsGiving = true;
+            wantedItem.IsWanted = true;
+            givingItem.IsTradeable = false;
+            wantedItem.IsTradeable = false;
+            proposal.Proposee = model.Proposee.UserName;
+            proposal.ProposeeItem = wantedItem.Name;
+            proposal.Proposer = model.Proposer.UserName;
+            proposal.ProposerItem = givingItem.Name;
+            _context.Proposals.Add(proposal);
+            wantedItem.Proposal = proposal;
+            givingItem.Proposal = proposal;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Proposal");
+        }
+
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _context.InventoryItems.FindAsync(id);
@@ -123,6 +138,31 @@ namespace BoardGameStore.Controllers
             _context.Update(item);
             await _context.SaveChangesAsync();
             return RedirectToAction("Inventory");
+        }
+
+        //Add proposer's item to proposee inventory, vice versa
+        //Remove proposers items from their inventory, proposee's from theirs
+        //Delete Proposal
+        //Savechanges 
+        [HttpPost]
+        public IActionResult Accept(int id)
+        {
+            var proposal = _context.Proposals.Find(id);
+            var recipient = _context.Users.Include(x => x.Inventory).ThenInclude(x => x.InventoryItems).FirstOrDefault(x => x.UserName == proposal.Proposee);
+            var receivedItem = _context.InventoryItems.First(x => x.Proposal.ID == id && x.Name == proposal.ProposerItem);
+            var sender = _context.Users.Include(x => x.Inventory).ThenInclude(x => x.InventoryItems).FirstOrDefault(x => x.UserName == proposal.Proposer);
+            var sentItem = _context.InventoryItems.First(x => x.Proposal.ID == id && x.Name == proposal.ProposeeItem);
+            recipient.Inventory.InventoryItems.Add(receivedItem);
+            recipient.Inventory.InventoryItems.Remove(sentItem);
+            sender.Inventory.InventoryItems.Add(sentItem);
+            sender.Inventory.InventoryItems.Remove(receivedItem);
+            receivedItem.IsGiving = false;
+            receivedItem.IsTradeable = false;
+            sentItem.IsWanted = false;
+            sentItem.IsTradeable = false;
+            _context.Proposals.Remove(proposal);
+            _context.SaveChanges();
+            return View(proposal);
         }
     }
 }

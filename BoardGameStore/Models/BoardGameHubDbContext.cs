@@ -28,6 +28,7 @@ namespace BoardGameStore.Models
         public DbSet<OrderItem> OrderItems{ get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
+        public DbSet<Proposal> Proposals { get; set; }
     }
 
     public class BoardGameHubUser : IdentityUser
@@ -36,7 +37,6 @@ namespace BoardGameStore.Models
         public string LastName { get; set; }
         public Cart Cart { get; set; }
         public Inventory Inventory { get; set; }
-     
     }
 
     public class Product
@@ -128,6 +128,20 @@ namespace BoardGameStore.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public bool IsTradeable { get; set; }
+        public bool IsWanted { get; set; } = false;
+        public bool IsGiving { get; set; } = false;
         public Inventory Inventory { get; set; }
+        public Proposal Proposal { get; set; }
+    }
+
+    public class Proposal
+    {
+        public int ID { get; set; }
+        public string Proposer { get; set; }
+        public string Proposee { get; set; }
+        public string ProposerItem { get; set; }
+        public string ProposeeItem { get; set; }
+        public ICollection<InventoryItem> InventoryItems { get; set; }
+
     }
 }

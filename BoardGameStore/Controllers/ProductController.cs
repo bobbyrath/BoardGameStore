@@ -77,7 +77,6 @@ namespace BoardGameStore.Controllers
 
                 _context.Carts.Add(cart);
                 Response.Cookies.Append("cartId", cartId.ToString(), new Microsoft.AspNetCore.Http.CookieOptions { Expires = DateTime.UtcNow.AddYears(100) });
-
             }
             CartItem item = cart.CartItems.FirstOrDefault(x => x.Product.ID == id);
             if (item == null)

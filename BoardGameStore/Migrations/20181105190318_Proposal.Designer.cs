@@ -4,14 +4,16 @@ using BoardGameStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoardGameStore.Migrations
 {
     [DbContext(typeof(BoardGameHubDbContext))]
-    partial class BoardGameHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181105190318_Proposal")]
+    partial class Proposal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,6 +60,8 @@ namespace BoardGameStore.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<int?>("ProposalID");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -78,6 +82,8 @@ namespace BoardGameStore.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ProposalID");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -250,17 +256,17 @@ namespace BoardGameStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Proposee");
+                    b.Property<string>("ProposeeID");
 
-                    b.Property<string>("ProposeeItem");
+                    b.Property<int>("ProposeeItemID");
 
-                    b.Property<string>("Proposer");
+                    b.Property<string>("ProposerID");
 
-                    b.Property<string>("ProposerItem");
+                    b.Property<int>("ProposerItemID");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Proposals");
+                    b.ToTable("Proposal");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -382,6 +388,10 @@ namespace BoardGameStore.Migrations
                     b.HasOne("BoardGameStore.Models.Inventory", "Inventory")
                         .WithMany()
                         .HasForeignKey("InventoryID");
+
+                    b.HasOne("BoardGameStore.Models.Proposal", "Proposal")
+                        .WithMany()
+                        .HasForeignKey("ProposalID");
                 });
 
             modelBuilder.Entity("BoardGameStore.Models.CartItem", b =>

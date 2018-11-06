@@ -27,7 +27,7 @@
                         <td>@item.Name</td>
                         <td>@user.UserName</td>
                         <td>
-                            <a asp-action="Propose" asp-route-id="@item.ID" class="btn btn-primary">Propose</a>
+                            <a asp-controller="Trade" asp-action="Propose" asp-route-proposeeid="@user.Id" asp-route-id="@item.ID" class="btn btn-primary">Propose</a>
                         </td>
                     }
                 </tr>

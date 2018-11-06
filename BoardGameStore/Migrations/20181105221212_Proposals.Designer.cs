@@ -4,14 +4,16 @@ using BoardGameStore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoardGameStore.Migrations
 {
     [DbContext(typeof(BoardGameHubDbContext))]
-    partial class BoardGameHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181105221212_Proposals")]
+    partial class Proposals
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,13 +252,13 @@ namespace BoardGameStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Proposee");
+                    b.Property<string>("ProposeeID");
 
-                    b.Property<string>("ProposeeItem");
+                    b.Property<int>("ProposeeItemID");
 
-                    b.Property<string>("Proposer");
+                    b.Property<string>("ProposerID");
 
-                    b.Property<string>("ProposerItem");
+                    b.Property<int>("ProposerItemID");
 
                     b.HasKey("ID");
 
