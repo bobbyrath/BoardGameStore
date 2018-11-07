@@ -152,7 +152,6 @@ namespace BoardGameStore.Controllers
                             this.ModelState.AddModelError(transactionError.Code.ToString(), transactionError.Message);
                         }
                     }
-                    
                 }
             }
             return View(model);

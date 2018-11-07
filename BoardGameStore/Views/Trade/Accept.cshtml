@@ -3,9 +3,10 @@
     ViewData["Title"] = "Accept";
 }
 
-<h2> Congratulations @Model.Proposee!, you received @Model.ProposerItem from @Model.Proposer in exchange for @Model.ProposeeItem</h2>
+<h2> Congratulations @Model.Proposee!</h2>
+<h4>You received @Model.ProposerItem from @Model.Proposer in exchange for @Model.ProposeeItem</h4>    
 
-<p>Please note that BoardGameHub is in no way liable for shipping these products.</p>
+<h7>Please note that BoardGameHub is in no way liable for shipping these products.</h7>
 
 <a class="btn btn-primary btn-lg" asp-action="Inventory">View Inventory</a>
 <a class="btn btn-primary btn-lg" asp-action="Find">Find Another Trade</a>

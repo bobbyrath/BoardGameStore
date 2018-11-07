@@ -3,15 +3,37 @@
     ViewData["Title"] = "Details";
 }
 
-<p>Proposer: @Model.Proposer</p>
-<p>ProposerItem: @Model.ProposerItem</p>
-<p>Proposee: @Model.Proposee</p>
-<p>ProposeeItem:  @Model.ProposeeItem</p>
-
+<h1>Proposal #@Model.ID</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Proposer</th>
+            <th>Wants</th>
+            <th>Which Is Owned By</th>
+            <th>In Exchange For</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Proposer</td>
+            <td>@Model.ProposeeItem</td>
+            <td>@Model.Proposee</td>
+            <td>@Model.ProposerItem</td>
+        </tr>
+    </tbody>
+</table>
 @if (Model.Proposee == User.Identity.Name)
 {
     <form method="post" asp-controller="Trade" asp-action="Accept">
+        <a class="btn btn-primary" asp-controller="Trade" asp-action="Inventory">View Inventory</a>
+        <a class="btn btn-primary" asp-controller="Trade" asp-action="Find">Find Trade</a>
         <input type="hidden" name="id" value="@Model.ID" />
-        <input type="submit" value="Accept Trade" class="btn btn-primary" />
+        <input type="submit" value="Accept Trade" class="btn btn-success" />
     </form>
 }
+else
+{
+    <a class="btn btn-primary" asp-controller="Trade" asp-action="Inventory">View Inventory</a>
+    <a class="btn btn-primary" asp-controller="Trade" asp-action="Find">Find Trade</a>
+}
+
