@@ -115,6 +115,7 @@ namespace BoardGameStore.Controllers
                         // Delete the cart, cart items, and clear the cookie or "user cart" info so that the user will get a new cart next time.
                         _context.Carts.Remove(myCart);
 
+                        //If the user was logged in at the time of purchase, the purchased items will be added to their inventory. 
                         if (User.Identity.IsAuthenticated)
                         {
                             var currentUser =  await _context.Users.Include(x => x.Cart)

@@ -27,6 +27,13 @@ namespace BoardGameStore.Controllers
                 {
                     myCart = currentUser.Cart;
                 }
+                else if (Request.Cookies.ContainsKey("cartID"))
+                {
+                    if (Guid.TryParse(Request.Cookies["cartID"], out Guid cookieId))
+                    {
+                        myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cookieId);
+                    }
+                }
             }
             else if (Request.Cookies.ContainsKey("cartID"))
             {

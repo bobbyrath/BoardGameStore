@@ -23,6 +23,7 @@
     </div>
     <div class="col-sm-12 col-md-8">
         <h2>@Model.Name</h2>
+        <p>@Model.Category</p>
         <p>@Model.Description</p>
         <h4>@(Model.Price.HasValue ? Model.Price.Value.ToString("C") : "No Price")</h4>
         <form method="post">
@@ -37,3 +38,7 @@
         </form>
     </div>
 </div>
+<p class="mt-2">
+    <a asp-action="Index" class="btn btn-primary">Browse More Products</a>
+</p>
+

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BoardGameStore.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class ProductsAdminController : Controller
     {
         private readonly BoardGameHubDbContext _context;

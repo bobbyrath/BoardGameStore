@@ -30,7 +30,7 @@ else if (Model.CartItems.Count >= 1)
             {
                 <tr>
                     <td>@item.Product.Name</td>
-                    <td>@item.Product.Description</td>
+                    <td>@item.Product.Category</td>
                     @*<td><img src="@item.Product.Image" class="img-fluid" /></td>*@
                     <td>@((item.Product.Price ?? 0).ToString("c"))</td>
                     <td>@item.Quantity</td>

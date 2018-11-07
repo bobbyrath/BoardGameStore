@@ -6,6 +6,7 @@ using BoardGameStore.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SendGrid;
 
 namespace BoardGameStore.Controllers
 {
