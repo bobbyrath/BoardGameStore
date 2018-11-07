@@ -44,7 +44,6 @@ namespace BoardGameStore.Controllers
         {
             if (ModelState.IsValid)
             {
-               
                 // TODO: Do some more advanced validation 
                 //  - the address info is required, but is it real? I can use an API to find out!
                 //  - the credit card is required, but does it have available funds?  Again, I can use an API
@@ -111,18 +110,45 @@ namespace BoardGameStore.Controllers
                             }).ToHashSet()
                         };
 
-                        _context.Orders.Add(order);
+                        await _context.Orders.AddAsync(order);
+
                         // Delete the cart, cart items, and clear the cookie or "user cart" info so that the user will get a new cart next time.
                         _context.Carts.Remove(myCart);
 
                         if (User.Identity.IsAuthenticated)
                         {
-                            var currentUser = _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).First(x => x.UserName == User.Identity.Name);
+                            var currentUser =  await _context.Users.Include(x => x.Cart)
+                                .ThenInclude(x => x.CartItems)
+                                .ThenInclude(x => x.Product)
+                                .Include(x => x.Inventory)
+                                .ThenInclude(x => x.InventoryItems)
+                                .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+                            if (currentUser.Inventory == null)
+                            {
+                                 Inventory inventory = new Inventory
+                                {
+                                    UserID = currentUser.Id,
+                                    InventoryItems = currentUser.Cart.CartItems.Select(x => new InventoryItem
+                                    {
+                                        Name = x.Product.Name
+                                    }).ToHashSet()
+                                };
+                                _context.Add(currentUser.Inventory);
+                            }
+                            else
+                            {
+                                foreach (var item in currentUser.Cart.CartItems)
+                                {
+                                    InventoryItem newItem = new InventoryItem();
+                                    newItem.Name = item.Product.Name;
+                                    currentUser.Inventory.InventoryItems.Add(newItem);
+                                }
+                            }
                             currentUser.Cart = null;
                         }
                         Response.Cookies.Delete("cartID");
 
-                        _context.SaveChanges();
+                        await _context.SaveChangesAsync();
 
                         // TODO: Email the user to let them know their order has been placed. -- I need an API for this!
                         UriBuilder builder = new UriBuilder(Request.Scheme, Request.Host.Host, Request.Host.Port ?? 80, "receipt/index/" + order.ID);

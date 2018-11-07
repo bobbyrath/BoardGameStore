@@ -53,43 +53,60 @@ namespace BoardGameStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Details(int id, int quantity = 1)
+        public async Task<IActionResult> Details(int id, int quantity = 1)
         {
             Guid cartId;
             Cart cart = null;
-            if (Request.Cookies.ContainsKey("cartId"))
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUser = await _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).FirstAsync(x => x.UserName == User.Identity.Name);
+                if (currentUser.Cart != null)
+                {
+                    cart = currentUser.Cart;
+                }
+                else 
+                {
+                    cart = new Cart();
+                    cartId = Guid.NewGuid();
+                    cart.CookieIdentifier = cartId;
+                    currentUser.Cart = cart; 
+                    await _context.SaveChangesAsync();
+                }
+            }
+            if (cart == null && Request.Cookies.ContainsKey("cartId"))
             {
                 if (Guid.TryParse(Request.Cookies["cartId"], out cartId))
                 {
                     //https://docs.microsoft.com/en-us/ef/core/querying/related-data
-                    cart = _context.Carts
+                    cart = await _context.Carts
                         .Include(carts => carts.CartItems)
                         .ThenInclude(cartitems => cartitems.Product)
-                        .FirstOrDefault(x => x.CookieIdentifier == cartId);
+                        .FirstOrDefaultAsync(x => x.CookieIdentifier == cartId);
                 }
             }
-
+            
             if (cart == null)
             {
                 cart = new Cart();
                 cartId = Guid.NewGuid();
                 cart.CookieIdentifier = cartId;
 
-                _context.Carts.Add(cart);
+                await _context.Carts.AddAsync(cart);
                 Response.Cookies.Append("cartId", cartId.ToString(), new Microsoft.AspNetCore.Http.CookieOptions { Expires = DateTime.UtcNow.AddYears(100) });
             }
-            CartItem item = cart.CartItems.FirstOrDefault(x => x.Product.ID == id);
+            CartItem item = null;
+            item = cart.CartItems.FirstOrDefault(x => x.Product.ID == id);
             if (item == null)
             {
                 item = new CartItem();
-                item.Product = _context.Products.Find(id);
+                item.Product = await _context.Products.FindAsync(id);
                 cart.CartItems.Add(item);
             }
 
             item.Quantity += quantity;
             cart.LastModified = DateTime.Now;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Cart");
         }
     }

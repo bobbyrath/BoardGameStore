@@ -48,6 +48,7 @@ namespace BoardGameStore.Models
         public decimal? Price { get; set; }
         public string Image { get; set; }
         public string Category { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
     }
 
     public class Cart
