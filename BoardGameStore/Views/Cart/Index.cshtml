@@ -1,4 +1,9 @@
 ﻿@model Cart
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/lib/popper.js/dist/umd/popper.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -12,51 +17,67 @@
 }
 else if (Model.CartItems.Count >= 1)
 {
-    <h2>Shopping Cart</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Line Total</th>
-                <th></th>
-            </tr>
-        </thead>
-        @{ decimal total = 0; }
-        <tbody>
-            @foreach (var item in Model.CartItems)
-            {
+        <h2>Shopping Cart</h2>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@item.Product.Name</td>
-                    <td>@item.Product.Category</td>
-                    @*<td><img src="@item.Product.Image" class="img-fluid" /></td>*@
-                    <td>@((item.Product.Price ?? 0).ToString("c"))</td>
-                    <td>@item.Quantity</td>
-                    <td>@((item.Quantity * (item.Product.Price ?? 0)).ToString("c"))</td>
-                    @{ total = total + (item.Quantity * (item.Product.Price ?? 0));}
-                    <td>
-                        <form method="post" asp-action="remove">
-                            <input type="hidden" name="id" value="@item.ID" />
-                            <input type="submit" value="Remove" class="btn btn-primary" />
-                        </form>
-                    </td>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td>Total</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>@total.ToString("c")</td>
-                <td></td>
-            </tr>
-
-        </tfoot>
-
-    </table>
+            </thead>
+            @{ decimal total = 0; }
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Product.Category</td>
+                        <td>@((item.Product.Price ?? 0).ToString("c"))</td>
+                        <td>
+                            <form method="post" asp-action="Update">
+                                <select name="quantity" class="form-control-sm" id="quant" onchange="this.form.submit()">
+                                    @for (int i = 1; i < 11; i++)
+                                    {
+                                        @if (i == item.Quantity)
+                                        {
+                                            <option selected value="@i">@i</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    }
+                                </select>
+                                <input type="hidden" name="id" value="@item.ID" id="test"/>
+                            </form>
+                        </td>
+                        <td>@((item.Quantity * (item.Product.Price ?? 0)).ToString("c"))</td>
+                        @{ total = total + (item.Quantity * (item.Product.Price ?? 0));}
+                        <td>
+                            <form method="post" asp-action="remove">
+                                <input type="hidden" name="id" value="@item.ID" />
+                                <input type="submit" value="Remove" class="btn btn-primary" />
+                            </form>
+                        </td>
+                    </tr>
+                  }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total:</td>
+                    <td>@total.ToString("c")</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    <a asp-action="Index" asp-controller="Product" class="btn btn-primary">Add More Games</a>
     <a asp-action="index" asp-controller="checkout" class="btn btn-primary">Checkout</a>
 }
+

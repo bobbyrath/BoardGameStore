@@ -69,11 +69,50 @@ namespace BoardGameStore.Controllers
             return View(myCart);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, int quantity)
+        {
+            Guid cartID;
+            Cart cart = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUser = await _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).FirstAsync(x => x.UserName == User.Identity.Name);
+                if (currentUser.Cart != null)
+                {
+                    cart = currentUser.Cart;
+                }
+            }
+            else if (Request.Cookies.ContainsKey("cartID"))
+            {
+                if (Guid.TryParse(Request.Cookies["cartID"], out cartID))
+                {
+                    cart = _context.Carts
+                        .Include(carts => carts.CartItems)
+                        .ThenInclude(cartitems => cartitems.Product)
+                        .FirstOrDefault(x => x.CookieIdentifier == cartID);
+                }
+            }
+            CartItem item = cart.CartItems.FirstOrDefault(x => x.ID == id);
+            item.Quantity = quantity;
+            cart.LastModified = DateTime.Now;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+
+        }
+
         public IActionResult Remove(int id)
         {
             Guid cartID;
             Cart cart = null;
-            if (Request.Cookies.ContainsKey("cartID"))
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUser = _context.Users.Include(x => x.Cart).ThenInclude(x => x.CartItems).ThenInclude(x => x.Product).First(x => x.UserName == User.Identity.Name);
+                if (currentUser.Cart != null)
+                {
+                    cart = currentUser.Cart;
+                }
+            }
+            else if (Request.Cookies.ContainsKey("cartID"))
             {
                 if (Guid.TryParse(Request.Cookies["cartID"], out cartID))
                 {
