@@ -1,0 +1,13 @@
+﻿@model Proposal
+@{
+    ViewData["Title"] = "Remove";
+}
+
+<h2>Proposal #@Model.ID has been cancelled.</h2>
+
+<div class="mt-2">
+    <a class="btn btn-primary" asp-controller="Trade" asp-action="Inventory">View Inventory</a>
+    <a class="btn btn-primary" asp-controller="Trade" asp-action="Find">Find Trade</a>
+</div>
+
+

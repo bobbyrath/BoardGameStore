@@ -28,7 +28,7 @@
         <h4>@(Model.Price.HasValue ? Model.Price.Value.ToString("C") : "No Price")</h4>
         <form method="post">
             <input asp-for="ID" type="hidden" />
-            <select name="quantity">
+            <select name="quantity" class="form-control-sm mr-2">
                 @for (int i = 1; i < 11; i++)
                 {
                     <option value="@i">@i</option>
@@ -38,7 +38,7 @@
         </form>
     </div>
 </div>
-<p class="mt-2">
+<p class="mt-5">
     <a asp-action="Index" class="btn btn-primary">Browse More Products</a>
 </p>
 

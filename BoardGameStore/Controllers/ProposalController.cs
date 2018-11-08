@@ -21,11 +21,25 @@ namespace BoardGameStore.Controllers
             return View();
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var item = _context.InventoryItems.Include(x => x.Proposal).FirstOrDefault(x => x.ID == id);
+            var item = await _context.InventoryItems.Include(x => x.Proposal).FirstOrDefaultAsync(x => x.ID == id);
             var proposal = item.Proposal;
             
+            return View(proposal);
+        }
+
+        public async Task<IActionResult> Remove(int id)
+        {
+            var proposal = _context.Proposals.Find(id);
+            var proposerItem = await _context.InventoryItems.FirstAsync(x => x.Proposal.ID == id && x.Name == proposal.ProposerItem);
+            var proposeeItem = await _context.InventoryItems.FirstAsync(x => x.Proposal.ID == id && x.Name == proposal.ProposeeItem);
+            proposerItem.IsGiving = false;
+            proposerItem.IsTradeable = true;
+            proposeeItem.IsWanted = false;
+            proposeeItem.IsTradeable = true;
+            _context.Proposals.Remove(proposal);
+            await _context.SaveChangesAsync();
             return View(proposal);
         }
     }
