@@ -32,6 +32,7 @@ namespace BoardGameStore.Controllers
                     if (Guid.TryParse(Request.Cookies["cartID"], out Guid cookieId))
                     {
                         myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cookieId);
+                        currentUser.Cart = myCart;
                     }
                 }
             }
@@ -58,6 +59,13 @@ namespace BoardGameStore.Controllers
                 {
                     myCart = currentUser.Cart;
                 }
+                else if (Request.Cookies.ContainsKey("cartID"))
+                {
+                    if (Guid.TryParse(Request.Cookies["cartID"], out Guid cartID))
+                    {
+                        myCart = _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefault(x => x.CookieIdentifier == cartID);
+                    }
+                }
             }
             else if (Request.Cookies.ContainsKey("cartID"))
             {
@@ -81,15 +89,22 @@ namespace BoardGameStore.Controllers
                 {
                     cart = currentUser.Cart;
                 }
+                else if (Request.Cookies.ContainsKey("cartID"))
+                {
+                    if (Guid.TryParse(Request.Cookies["cartID"], out cartID))
+                    {
+                        cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.CookieIdentifier == cartID);
+                    }
+                }
             }
             else if (Request.Cookies.ContainsKey("cartID"))
             {
                 if (Guid.TryParse(Request.Cookies["cartID"], out cartID))
                 {
-                    cart = _context.Carts
+                    cart = await _context.Carts
                         .Include(carts => carts.CartItems)
                         .ThenInclude(cartitems => cartitems.Product)
-                        .FirstOrDefault(x => x.CookieIdentifier == cartID);
+                        .FirstOrDefaultAsync(x => x.CookieIdentifier == cartID);
                 }
             }
             CartItem item = cart.CartItems.FirstOrDefault(x => x.ID == id);
@@ -100,7 +115,7 @@ namespace BoardGameStore.Controllers
 
         }
 
-        public IActionResult Remove(int id)
+        public async Task<IActionResult> Remove(int id)
         {
             Guid cartID;
             Cart cart = null;
@@ -128,7 +143,7 @@ namespace BoardGameStore.Controllers
 
             _context.CartItems.Remove(item);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
 
         }
