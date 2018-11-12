@@ -13,6 +13,7 @@ namespace BoardGameStore.Models
         public string UserName { get; set; }
 
         [Required]
+        [MinLength(5, ErrorMessage = "Password should be at least 8 characters long")]
         public string Password { get; set; }
 
         [Required]

@@ -42,7 +42,7 @@ namespace BoardGameStore.Controllers
         //Responds on POST Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -62,13 +62,13 @@ namespace BoardGameStore.Controllers
                     IdentityResult passwordResult = this._signInManager.UserManager.AddPasswordAsync(newUser, model.Password).Result;
                     if (passwordResult.Succeeded)
                     {
-                        this._signInManager.SignInAsync(newUser, false);
+                        await this._signInManager.SignInAsync(newUser, false);
                         newUser.Inventory = new Inventory
                         {
                             UserID = newUser.Id
                         };
-                        _context.Add(newUser.Inventory);
-                        _context.SaveChanges();
+                        await _context.AddAsync(newUser.Inventory);
+                        await _context.SaveChangesAsync();
                         return RedirectToAction("Index", "Home");
 
                     }
@@ -92,9 +92,9 @@ namespace BoardGameStore.Controllers
         }
 
         
-        public IActionResult Logout()
+        public async Task<ActionResult> Logout()
         {
-            this._signInManager.SignOutAsync();
+            await this._signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 

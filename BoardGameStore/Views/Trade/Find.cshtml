@@ -4,7 +4,8 @@
     ViewData["Title"] = "Find";
 }
 
-<h2>Games available for trade</h2>
+<h2 class="game">Games available for trade.</h2>
+<h2 class="nogame">No games currently available for trade.</h2>
 <table class="table table-hover mytbl">
     <thead>
         <tr>
@@ -40,6 +41,17 @@
 {
     <style>
         .mytbl {
+            display: none;
+        }
+        .game {
+            display: none;
+        }
+    </style>
+}
+else
+{
+    <style>
+        .nogame {
             display: none;
         }
     </style>
