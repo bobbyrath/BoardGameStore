@@ -1975,7 +1975,7 @@ pre code {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
-  border-radius: 0;
+  border-radius: 2px;
   -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -2553,6 +2553,7 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #DF691A;
   border-color: #DF691A;
+  border-radius: 2px;
 }
 
 .btn-primary:hover {
@@ -2625,6 +2626,7 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #5cb85c;
   border-color: #5cb85c;
+  border-radius: 2px;
 }
 
 .btn-success:hover {
@@ -2697,6 +2699,7 @@ fieldset:disabled a.btn {
   color: #212529;
   background-color: #f0ad4e;
   border-color: #f0ad4e;
+  border-radius: 2px;
 }
 
 .btn-warning:hover {
@@ -2733,6 +2736,7 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #d9534f;
   border-color: #d9534f;
+  border-radius: 2px;
 }
 
 .btn-danger:hover {
